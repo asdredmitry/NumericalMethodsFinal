@@ -52,7 +52,7 @@ double Runge(double a, double b, int &N, double eps)
 int main()
 {
         double eps = 0.01;
-        double delta_1 = 0.0002;
+        double delta_1 = 0.0001;
         double C = 2.123;
 	double a_c = 0;
 	double b_c = 0;
