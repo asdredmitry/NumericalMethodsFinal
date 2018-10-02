@@ -2,11 +2,11 @@
 #include <cmath>
 
 using namespace std;
-const double E = 2.71828;
+
 
 double f(double x)
 {
-        if (x == 0) return 9;
+        if (fabs(x) < 0.00000000001) return 9;
         else
             return (x + 1/x)*pow(sin(3*x),2)*exp(-pow(x,2))/log(1 + x);
 }
@@ -61,7 +61,7 @@ int main()
 	int N_1R = 0;
 	int N_c = 0;
 	
-        double S_1 = Integrate(delta_1, 2.123, N_1);
+        double S_1 = Integrate(delta_1, C, N_1);
         double S_1R = Runge(delta_1, 2, N_1R, eps);
 
 	cout << fixed;
