@@ -54,7 +54,7 @@ int main()
         double eps = 0.01;
         double delta_1 = 0.0001;
         double C = 2.123;
-	double a_c = 0;
+       	double a_c = 0;
 	double b_c = 0;
 
         int N_1 = 29748846;
@@ -62,7 +62,8 @@ int main()
 	int N_c = 0;
 	
         double S_1 = Integrate(delta_1, C, N_1);
-        double S_1R = Runge(delta_1, 2, N_1R, eps);
+        double S_1R = Runge(delta_1, C, 
+N_1R, eps);
 
 	cout << fixed;
 	cout.precision(5);
