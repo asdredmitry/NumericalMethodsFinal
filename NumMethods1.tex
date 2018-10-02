@@ -1,0 +1,184 @@
+\documentclass[titlepage]{article}
+\usepackage[12pt]{extsizes} 
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+%\usepackage{pscyr}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,secdot}
+\usepackage[left=30mm, top=20mm, right=30mm, bottom=20mm, nohead, footskip=15mm]{geometry} 
+\usepackage[pdftex]{graphicx}
+\usepackage[indentfirst]{titlesec}
+\usepackage[usenames]{color}
+\usepackage{colortbl}
+\usepackage{listings}
+\usepackage{secdot}
+
+\def\l{\left}
+\def\r{\right}
+\def\le{\leqslant}
+\def\ge{\geqslant}
+
+\begin{document} 
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{lemma}{Лемма}
+\newtheorem{definition}{Определение}
+\renewcommand{\proofname}{Доказательство}
+
+\begin{center}
+\hfill \break
+\hfill \break
+\hfill \break
+\LARGE Вычисление несобственного интеграла с помощью квадратурных формул \\
+\hfill \break
+\large Д.А. Михайлин \\
+\hfill \break
+\today \\
+
+\end{center}
+
+\section{Постановка задачи}
+Требуется приближенно вычислить интеграл: 
+\begin{gather}
+	\int_{0}^{+\infty}(x + \frac{1}{x})\frac{(sin{3x})^2}{\ln(1 + x)}e^{-x^2}dx
+\end{gather}
+с заданной точностью $\varepsilon = 10^{-2}$.
+
+\section{Доказательство сходимости интеграла}
+Прежде чем приступить к вычислению интеграла, необходимо убедиться в его сходимости во всей области интегрирования. Для этого исследуем подынтегральную функцию $f(x) = (x + \frac{1}{x})\frac{(sin{3x})^2}{ln(1 + x)}e^{-x^2}$ в особых точках на промежутке $[0, +\infty)$. Рассмотрим две особые точки: $x = 0$,  $x \to \infty$:
+
+\begin{enumerate}
+	\item $x = 0$ \\
+	\begin{gather}
+		\notag \lim_{x \to 0}{f(x)} = \lim_{x \to 0}{(x + \frac{1}{x})\frac{(sin{3x})^2}{\ln(1 + x)}e^{-x^2}} = \\
+		\notag = \lim_{x \to 0}{\frac{9x^2 + o(x^2)}{x(x + o(x))}(1 + x^2)(e^{-x^2})} = 9
+	\end{gather}
+	Таким образом, $x = 0$ является устранимой особой точкой. Это значит, что в нуле мы можем доопределить $f(x)$ до непрерывной функции, поэтому интеграл не является несобственным в точке $x = 0$.
+\item $x \to \infty$ \\
+	
+	$\exists$ такое большое число $C$, что:
+	\begin{gather}
+		\notag \l| \int_{C}^{+\infty}{f(x)dx} \r| \le \int_{C}^{+\infty}{\l| \frac{x + 1}{x^2}\frac{sin^2{3x}}{\ln{(1+x)}}e^{-x^2}\r|dx^2} \le \\ \notag \le\int_{C}^{+\infty}{ 2e^{-x^2} dx^2} = 2e^{-C^2} < \infty
+	\end{gather}
+Сходимость интеграла на бесконечности доказана.
+\end{enumerate}
+\section{Оценки параметров $\delta_1$, $C$}
+Положим $\varepsilon_1 = \varepsilon_2 = 2\cdot10^{-3}$ $\varepsilon_3 = 6\cdot10^{-3}$ и разобьем наш промежуток интегрирования на 3 части: $[0, \delta_1), [\delta_1, C), [C, +\infty)$.
+
+Теперь нам необходимо подобрать числа $\delta_1$ и $C$ таким образом, чтобы $\l|\int_{0}^{\delta_1}{f(x)dx}\r| \le \varepsilon_1$ и $\l|\int_{C}^{+\infty}{f(x)dx}\r| \le \varepsilon_3$. Тем самым, задача сведется к вычислению интеграла $\tilde I_2 = \int_{\delta_1}^{С}{f(x)dx}$ с точностью $\varepsilon_2$.	
+\begin{enumerate}
+	\item Оценим $\delta_1$. \\
+	Будем пользоваться следующими фактами:
+
+	\begin{gather}
+		\notag \sin(x) \le x  \\ 
+		\notag \text{и} \\
+		\notag \frac{x}{x + 1} \le \ln{(x + 1)}
+	\end{gather}
+
+	\begin{gather}
+		\notag \l|\int_{0}^{\delta_1}{f(x)dx}\r| \le \int_{0}^{\delta_1}{\l|f(x)\r|dx} \le \int_{0}^{\delta_1}{\l| (x + \frac{1}{x})\frac{(sin{3x})^2}{\ln(1 + x)}e^{-x^2}\r| dx} \le \\
+		\notag \le \int_{0}^{\delta_1}{\l| \frac{x^2 + 1}{x}e^{-x^2}\frac{x + 1}{x}9x^2\r|dx} 
+		\notag \le \int_{0}^{\delta_1}{18 dx} = 18\delta_1 \le \varepsilon_1
+	\end{gather}
+	Следовательно, $\delta_1 \le \varepsilon_1/18$
+	Подставив $\varepsilon_1 = 2\cdot10^{-3}$, получим $\bf{\delta_1 = 0.0001}$.
+	\item Оценим $C$.
+		\begin{gather}
+		\notag \l|\int_{C}^{+\infty}{f(x)dx}\r| \le \int_{C}^{+\infty}{\l| (x + \frac{1}{x})\frac{(sin{3x})^2}{\ln(1 + x)}e^{-x^2}\r|dx} \le \\
+		\notag \le \int_{C}^{+\infty}{\l|(\frac{x^2 + 1}{x})\frac{(sin{3x})^2}{\ln(1 + x)}e^{-x^2}\r|dx^2} \le \frac{C^2 + 1}{2C^2}\frac{1}{\ln{(1 + C)}}\int_{C}^{+\infty}{ e^{-x^2} dx^2} = \frac{C^2 + 1}{2C^2}\frac{1}{\ln{(1 + C)}}e^{-C^2} = \\F(C) \le \varepsilon_3 \\
+	F(2.1) > 0.006\\
+	F(2.123) = 0.0059
+	\end{gather}
+	Возьмем C = 2.123.
+\end{enumerate}
+\section{Квадратурные формулы для $I_2$}
+Будем вычислять $I_2$ по составной формуле прямоугольников. Для функции $f(x)$, определенной на некотором отрезке $[a,b]$ интеграл от нее приближенно вычисляется по формуле:
+$$I(f) = \int_{a}^{b}{f(x)dx} \approx S_N(f) = \frac{1}{N}\sum_{i=1}^{N}{f\l(a+(b-a)\frac{i-1/2}{N}\r)}$$
+\section{Оценка погрешности квадратурных формул}
+Погрешностью квадратурной формулы является величина:
+$$R_N(f) = I(f) - S_N(f)$$
+Для формулы прямоугольников справедлива следующая оценка:
+$$\l|R_N(f)\r| \le A\frac{(b-a)^2}{4N},$$
+для некоторого числа $A$, такого, что $\l|f'(x)\r| \le A$ на $[a,b]$. Таким образом, для вычисления необходимого числа отрезков разбиения нам необходимо оценить $\l|f'(x)\r|$ на $[a,b]$.
+\section{Оценка производной}
+Рассмотрим производную функции $f(x)$.
+Хотим оценить ее на отрезке $[\delta_1, 2.123]$
+Заметим, что $\l|(uvg)'\r| \le \l|u'vg\r| + \l|uv'g\r| + \l|uvg'\r|$.
+Разобъем функцию $f(x) = (x + \frac{1}{x})\frac{(sin{3x})^2}{\ln(1 + x)}e^{-x^2}$ на $u = e^{-x^2}$ $v = 
+(x + \frac{1}{x})sin(3x)$ $g = \frac{sin(3x)}{ln(1 + x)}$
+\begin{gather}
+		\notag \l|e^{-x^2}\r| \le 1 \\
+		\l|2xe^{-x^2}\r| \le 4.25
+		\
+\end{gather}
+Воспользуемя разложением синуса и косинуса в ряд тейлора с остаточным членом в форме лагранджа. $sin(x) = x - \frac{sin(c)}{2}x^2$ и $cos(x) = 1 - sin(c)x$
+\begin{gather}
+	\notag \l|v\r| = \l|(x + 1/x)*(3x - \frac{sin(c)9x^2}{2})\r| \le \l|(x^2 + 1)(3 + 4.5x^2)\r| = 128.217 
+\end{gather}
+\begin{gather}
+	\notag \l|v'\r| =\l|(1 - \frac{1}{x^2})sin(3x) + 3(x + \frac{1}{x})cos(3x)\r| \\ \le \l|6x - sin(c)4.5x^2 + sin(c)4.5 - cos(c)3x^2 -cos(c)3 \r| \le 66.2
+\end{gather}
+\begin{gather}
+	\notag \l|g\r| \le \l|(3 - sin(c)4.5x)(x + 1)\r| \le 39.204
+\end{gather}
+Воспользуемя разложением в ряд тейлора с остаточным членом в форме лагранджа.
+$ln(1 + x) = x - \frac{1}{2(1 + c)^2}x^2$
+\begin{gather}
+	\notag \l|g'\r| = \l|\frac{3ln(1 + x)cos(3x) - \frac{sin(3x)}{1 + x}}{ln^2{(1 + x)}}\r| \le\\ \l|\frac{3(x - \frac{x^2}{2(1 + c)^2})(1 - 3sin(c)x)(1 + x)^2 - (1 + x)(3x - 4.5sin(c)x^2)}{x^2}\r| \le \\ \le 225.007
+\end{gather}
+Следовательно $|f'(x)| \le 52808.159208 $ 
+\section{Таблица параметров}
+Вычислим $N_1$:
+$$N_1 = \frac{A_1(2.123-\delta_1)^2}{4\varepsilon_2} = 29748846$$
+
+Запишем полученные выше результаты в таблицу:
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		$\delta_1$ &  $C$ & $A$ &  $N_1$  \\
+		\hline
+		0.0001 & 2.123 & 52808.159208 & 29748846 \\
+		\hline
+	\end{tabular}
+\end{center}
+\section{Результаты расчёта}
+\begin{center}
+	\begin{tabular}{|c|c|}
+		\hline
+		$\tilde I_2$  & $\tilde I$\\
+		\hline
+		4.86966 & 4.86966 \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\section{Правило Рунге}
+Пусть $I$ - точное значение интеграла, а $S_N$ - его приближенное значение, вычисленное с использованием $N$ обращений к подынтегральной функции. Предположим, что известен главный член погрешности квадратурной формулы:
+$$I - S_N = CN^{-m} + o(N^{-m}),$$
+где $m$ - известно, а $C$ - нет. Тогда, подставляя в формулы выше $N_1$ и $N_2 = 2N_1$, получим:
+\begin{gather}
+	\notag I - S_{N_1} = CN_1^{-m} + o(N_1^{-m}) \\
+	\notag I - S_{N_2} = CN_2^{-m} + o(N_2^{-m}) \\
+	\notag S_{N_1} - S_{N_2} \approx C \frac{N_2^m - N_1^m}{N_2^m N_1^m} \Rightarrow \\
+	\notag C \approx \frac{S_{N_1} - S_{N_2}}{N_2^m - N_1^m}N_2^m N_1^m \Rightarrow \\
+	\notag I - S_{N_2} = \frac{S_{N_1} - S_{N_2}}{N_2^m - N_1^m}N_1^m
+\end{gather}
+Тогда, если взять $N_2 = 2N_1 = 2N$ получим:
+$$\l| I - S_{2N} \r| = \frac{\l| S_{2N} - S_N \r|}{2^m - 1} \le \varepsilon$$
+
+\section{Результаты по правилу Рунге}
+\begin{center}
+	\begin{tabular}{|c|c|}
+		\hline
+		$\hat N_1$ & $\hat I_2$  \\
+		\hline
+		512 & 4.85199  \\
+		\hline
+	\end{tabular}
+\end{center}
+
+
+\end{document}
