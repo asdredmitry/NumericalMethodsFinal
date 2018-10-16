@@ -51,42 +51,46 @@ double Runge(double a, double b, int &N, double eps)
 
 int main()
 {
-        double eps = 0.01;
-        double delta_1 = 0.0001;
-        double C = 2.123;
-       	double a_c = 0;
+    double eps = 0.01;
+    double delta_1 = 0.0001;
+    double C = 2.123;
+    double a_c = 0;
 	double b_c = 0;
 
-        int N_1 = 29748846;
+    int N_1 = 29748846;
 	int N_1R = 0;
 	int N_c = 0;
-	
+    char request = 'n';
+    cout << "Custom request ? (y/n)";
+    cin >> request;
+    if(request == 'n')
+    {
         double S_1 = Integrate(delta_1, C, N_1);
-        double S_1R = Runge(delta_1, C, 
-N_1R, eps);
+        double S_1R = Runge(delta_1, C, N_1R, eps);
 
-	cout << fixed;
-	cout.precision(5);
+        cout << fixed;
+        cout.precision(5);
 
-	cout << "Results for usual calculation:" << endl;
+        cout << "Results for usual calculation:" << endl;
         cout << "Integral of f(x) in [0.0001, 2.123]: " << S_1 << endl;
-	cout << endl;
-	cout << "Results fot Runge calculation:" << endl;
+        cout << endl;
+        cout << "Results fot Runge calculation:" << endl;
         cout << "Integral of f(x) in [0.0001, 2.123]: " << S_1R << " N_1 = " << N_1R << endl;
 
-	cout << endl;
-
-	cout << "Custom request" << endl;
-	cout << "Input a: ";
-	cin >> a_c;
-	cout << endl;
-	cout << "Input b: ";
-	cin >> b_c;
-	cout << endl;
-	cin >> N_c;
-	cout << endl;
-	cout << "Integral f(x) from " << a_c << " to " << b_c << " is: " << Integrate(a_c, b_c, N_c) << endl;;
-
-	
-
+        cout << endl;
+    }
+    else
+    {
+        cout << "Custom request" << endl;
+        cout << "Input a: ";
+        cin >> a_c;
+        cout << endl;
+        cout << "Input b: ";
+        cin >> b_c;
+        cout << endl;
+        cin >> N_c;
+        cout << endl;
+        cout << "Integral f(x) from " << a_c << " to " << b_c << " is: " << Integrate(a_c, b_c, N_c) << endl;;
+    }
+    return 0;
 }
